@@ -797,7 +797,7 @@ class ProfileViewSet(LoggingMixin, viewsets.ModelViewSet):
 
     """
     logging_methods = ['POST', 'PUT', 'PATCH', 'DELETE']
-    queryset = Profile.objects.filter(user_id = 1)
+    queryset = Profile.objects.filter (user_id =5)
     serializer_class = ProfileSerializer
     # This might be wrong, we may want to give the user the opportunity to
     # update their own user profile information
