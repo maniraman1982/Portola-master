@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'portolaUATapi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6CC331D4439B49A99E94E0A975C864A9 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7712CD80CD8247D392D0CA346A3F5AC7 }}
