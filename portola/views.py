@@ -39,6 +39,7 @@ from rest_framework.status import (
     HTTP_200_OK,
 )
 from rest_framework.response import Response
+
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.writer.excel import save_virtual_workbook
@@ -681,6 +682,31 @@ class ProfileCreateView(LoggingMixin, generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     permission_classes = [permissions.IsAuthenticated,IsAdminOrReadOnly]
 
+
+class ProfileViewSet(LoggingMixin, viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+
+    Permissions:
+        [permissions.IsAuthenticated,IsAdminOrReadOnly]
+        All authenticated users can read_only
+        allAdmins can read and write
+
+    We may want to change the permissions here so that a user can make
+    chenges to their own user profile information
+
+    """
+    logging_methods = ['POST', 'PUT', 'PATCH', 'DELETE']
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    # This might be wrong, we may want to give the user the opportunity to
+    # update their own user profile information
+    permission_classes = [permissions.IsAuthenticated,IsAdminOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 class ProjectViewSet(DetailSerializerMixin, LoggingMixin, viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -698,7 +724,7 @@ class ProjectViewSet(DetailSerializerMixin, LoggingMixin, viewsets.ModelViewSet)
     `/api/projects/?customer={id}` where id is an entity id
     """
     logging_methods = ['POST', 'PUT', 'PATCH', 'DELETE']
-    queryset = Project.objects.filter()
+    queryset = Project.objects.all()
     # serializer_class = ProjectListSerializer
     serializer_detail_class =  ProjectSerializer
     serializer_class =  ProjectSerializer
@@ -780,31 +806,6 @@ class ProjectViewSet(DetailSerializerMixin, LoggingMixin, viewsets.ModelViewSet)
 
     def perform_create(self, serializer):
         serializer.save()
-
-
-class ProfileViewSet(LoggingMixin, viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-
-    Permissions:
-        [permissions.IsAuthenticated,IsAdminOrReadOnly]
-        All authenticated users can read_only
-        allAdmins can read and write
-
-    We may want to change the permissions here so that a user can make
-    chenges to their own user profile information
-
-    """
-    logging_methods = ['POST', 'PUT', 'PATCH', 'DELETE']
-    queryset = Profile.objects.filter (user_id =5)
-    serializer_class = ProfileSerializer
-    # This might be wrong, we may want to give the user the opportunity to
-    # update their own user profile information
-    permission_classes = [permissions.IsAuthenticated,IsAdminOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
 
 class PVModelViewSet(LoggingMixin, viewsets.ModelViewSet):
     """

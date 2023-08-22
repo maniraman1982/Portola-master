@@ -37,7 +37,7 @@ ENCRYPT_KEY = b'2faW0g61jp_0WdGqZbwo1iYWfoU1COCCULI0PDvsOpk='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # This setting keeps DEBUG = True on all servers EXCEPT PortolaPROD
-DEBUG = (os.environ.get('WEBSITE_SITE_NAME') != 'PortolaUAT' )
+DEBUG = (os.environ.get('WEBSITE_SITE_NAME') != 'PortolaPROD' )
 
 
 if not DEBUG:
@@ -114,7 +114,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://portolauatapi.azurewebsites.net/']
 
 
 #DEBUG Setting:
@@ -132,11 +131,11 @@ CSRF_TRUSTED_ORIGINS = ['https://portolauatapi.azurewebsites.net/']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'portolauatdbnew',
-        'HOST': 'flexibleportolaprod.postgres.database.azure.com',
-        'USER': 'portolaprodFleixble',
-        'PASSWORD': 'Gesa@2023',
-        "PORT": "5432",
+        'NAME': os.environ.get('DBNAME','portoladevdb'),
+        'HOST': os.environ.get('DBHOST','localhost'),
+        'USER': os.environ.get('DBUSER','manager'),
+        'PASSWORD': os.environ.get('DBPASS','supersecretpass'),
+        "PORT": os.environ.get("DBPORT", "5432"),
         # 'OPTIONS': {'sslmode': 'require'},
     }
 }
@@ -192,9 +191,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': [
-        # 'rest_framework_filters.backends.RestFrameworkFilterBackend',
-        # 'rest_framework_filters.backends.ComplexFilterBackend',
-        # 'rest_framework.filters.OrderingFilter',
+        'rest_framework_filters.backends.RestFrameworkFilterBackend',
+        'rest_framework_filters.backends.ComplexFilterBackend',
+        'rest_framework.filters.OrderingFilter',
         # 'django_filters.rest_framework.DjangoFilterBackend'
         ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

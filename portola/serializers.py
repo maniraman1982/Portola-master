@@ -602,7 +602,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     def get_pvel_manager_user(self, obj):
         return obj.pvel_manager.username
     def get_pvel_manager_name(self, obj):
-        name = '{}'.format(obj.customer.display_name)
+        name = '{}, {}'.format(obj.pvel_manager.last_name, obj.pvel_manager.first_name)
         return name
     def get_last_document_date(self, obj):
         # TODO: Replace document_project with document_set
